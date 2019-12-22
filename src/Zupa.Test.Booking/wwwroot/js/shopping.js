@@ -9,10 +9,12 @@
             return products.map(function (product) {
                 let li = document.createElement('li');
                 li.className = "list-group-item d-flex justify-content-between lh-condensed";
+                product.quantity = 1;
                 li.onclick = function () {
                     addToBasket(product);
                 };
                 li.id = product.id;
+
                 let div = document.createElement('div');
                 let h6 = document.createElement('h6');
                 h6.className = "my-0";
@@ -65,7 +67,7 @@ function updateBasketView(basket)
     totalSpan.innerText = "Total (GBP)";
     totalLi.appendChild(totalSpan);
     let totalStrong = document.createElement('strong');
-    totalStrong.innerText = "£0.00";    
+    totalStrong.innerText = "£" + basket.total ;    
     totalLi.appendChild(totalStrong);
     basketList.appendChild(totalLi);
 

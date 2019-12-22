@@ -5,5 +5,6 @@ namespace Zupa.Test.Booking.ViewModels
     public class Basket
     {
         public IEnumerable<BasketItem> Items { get; set; }
+        public double total { get; set; }
     }
 }
