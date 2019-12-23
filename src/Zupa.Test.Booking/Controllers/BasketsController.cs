@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Zupa.Test.Booking.Data;
+using Zupa.Test.Booking.Services;
 using Zupa.Test.Booking.ViewModels;
 
 namespace Zupa.Test.Booking.Controllers
@@ -13,13 +14,11 @@ namespace Zupa.Test.Booking.Controllers
         private readonly IBasketsRepository _basketsRepository;
         private readonly IRedeemCodesRepository _redeemCodesRepository;
 
-        public BasketsController(IBasketsRepository basketsRepository, IRedeemCodesRepository redeemCodesRepository)
+        public BasketsController(IBasketsService basketsRepository, IRedeemCodesRepository redeemCodesRepository)
         {
             _basketsRepository = basketsRepository;
             _redeemCodesRepository = redeemCodesRepository;
         }
-
-    
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]

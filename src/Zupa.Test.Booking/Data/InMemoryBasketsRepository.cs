@@ -19,7 +19,6 @@ namespace Zupa.Test.Booking.Data
 
         public async Task<Basket> ReadAsync()
         {
-            _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
             return await Task.FromResult(_basket);
         }
 
@@ -42,7 +41,7 @@ namespace Zupa.Test.Booking.Data
             }
        
             _basket.Items = items;
-            _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
+           // _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
             return await Task.FromResult(_basket);
         }
     }

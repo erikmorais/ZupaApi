@@ -14,6 +14,7 @@ namespace Zupa.Test.Booking
         {
             services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
             services.AddSingleton<IBasketsRepository, InMemoryBasketsRepository>();
+            services.AddSingleton<IBasketsService, BasketsService>();
             services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             services.AddSingleton<IRedeemCodesRepository, InMemoryRedeemCodesRepository>();
             services.AddSingleton<ICalcEngineService<Basket>, CalcEnginePromoCodeService>();

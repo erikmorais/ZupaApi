@@ -41,7 +41,7 @@
         })
         .then(function (basket) {
             updateBasketView(basket);
-            resetBasketCount(basket.items.length);
+            resetBasketCount(countItems(basket.items));
         });
 });
 
@@ -106,11 +106,18 @@ function addToBasket(product) {
         return response.json();
     }).then(function (basket) {
         emptyBasketView();
-        resetBasketCount(basket.items.length);
+        //resetBasketCount(basket.items.length);
+        resetBasketCount(countItems(basket.items));
         updateBasketView(basket);
     });
 }
-
+function countItems(items) {
+    var total = 0;
+    for (var i = 0; i < items.length; i++) {
+        total = total + items[i].quantity;
+    }
+    return total;
+}
 function RedeemCode() {
     let redeemCode = document.getElementById('promoCode').value;
     fetch('/api/RedeemCodes',
@@ -139,7 +146,7 @@ function RedeemCode() {
                 })
                 .then(function (basket) {
                     emptyBasketView();
-                    resetBasketCount(basket.items.length);
+                    resetBasketCount(countItems(basket.items));
                     updateBasketView(basket);
                 });
         });
