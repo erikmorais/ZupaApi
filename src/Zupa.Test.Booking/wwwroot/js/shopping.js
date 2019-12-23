@@ -111,38 +111,11 @@ function addToBasket(product) {
     });
 }
 
-
-function placeOrderRedeemOld() {
-    let code = document.getElementById('promoCode').value;
-    let url = "/api/baskets?" + $.param({ redeemCode: code });
-   // fetch(url)
-       fetch('/api/baskets')
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (basket) {
-            fetch('api/orders', {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(basket)
-            }).then(function (response) {
-                return response.json();
-            }).then(function (order) {
-                alert('your order has been placed');
-                resetBasketCount(0);
-                emptyBasketView();
-            });
-        });
-}
-
-function placeOrderRedeem() {
+function RedeemCode() {
     let redeemCode = document.getElementById('promoCode').value;
     fetch('/api/RedeemCodes',
         {
-            method: 'POST',
+            method: 'PUT',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
@@ -150,15 +123,27 @@ function placeOrderRedeem() {
             body: JSON.stringify(redeemCode)
         })
         .then(function (response) {
-            return response.json();
+                return response.json();
         })
         .then(function (response) {
-                return response.json();
-            }).then(function (order) {
-                alert('Redeem Code used.');
-              //  resetBasketCount(0);
-               // emptyBasketView();
-            });
+            const json = response;
+            if (json.error == "") {
+                alert("Redeem Code Applied: " + json.id)
+            } else {
+                alert(json.error);
+            }
+
+            fetch('/api/baskets')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (basket) {
+                    emptyBasketView();
+                    resetBasketCount(basket.items.length);
+                    updateBasketView(basket);
+                });
+        });
+
 }
 
 function placeOrder() {

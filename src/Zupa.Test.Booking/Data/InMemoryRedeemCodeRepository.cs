@@ -12,7 +12,7 @@ namespace Zupa.Test.Booking.Data
         public InMemoryRedeemCodesRepository()
         {
             redeemCodes = new List<RedeemCode> {
-            new RedeemCode{ Discount =0.2,Used=false, id="discount10"},
+            new RedeemCode{ Discount =0.1,Used=false, id="discount10"},
             new RedeemCode{ Discount =0.5,Used=false, id="discount50"}
             };
         }
@@ -31,7 +31,6 @@ namespace Zupa.Test.Booking.Data
             var redeem = redeemCodes.Where(r => r.id == id).SingleOrDefault();
 
             if (redeem == null) throw new Exception("Redeem Code not found");
-            if (redeem.Used) throw new Exception("Redeem Code Already Used");
 
             redeem.Used = false;
 

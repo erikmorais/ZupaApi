@@ -17,13 +17,13 @@ namespace Zupa.Test.Booking.Data
 
         public async Task<Order> ReadAsync(Guid id)
         {
-            return _orders.First(order => order.ID == id);
+            return await Task.FromResult(_orders.First(order => order.ID == id));
         }
 
         public async Task<Order> SaveAsync(Order order)
         {
             _orders.Add(order);
-            return order;
+            return await Task.FromResult(order);
         }
     }
 }

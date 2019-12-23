@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,23 +24,42 @@ namespace Zupa.Test.Booking.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Basket>> AddToBasket([FromBody]string redeemCode)
+        public async Task<ActionResult<RedeemCodeModel>> AddToBasket([FromBody]string redeemCode)
         {
             var basket = await _basketsRepository.ReadAsync();
             if (redeemCode != null)
             {
                 var redeem = await _redeemCodesRepository.ReadAsync(redeemCode);
 
+
+                if (redeem == null)
+                {
+                    var err = new RedeemCodeModel { Id = "", Discount = 0, Error = "Redeem Code Not Found!: " + redeemCode };
+                    return StatusCode(StatusCodes.Status404NotFound, err);
+                }
+
                 if (redeem.Used)
                 {
-                    throw new Exception("Redeem Code Already used: " + redeemCode);
+                    string error = "";
+                    if (basket.RedeemCode != null && basket.RedeemCode.id == redeem.id)
+                    {
+                        error = "Redeem Code Already Applied " + redeem.id;
+                    }
+                    else
+                    {
+                        error = "Redeem Code Already Used: " + redeem.id;
+                    }
+
+                    var err = new RedeemCodeModel { Id = "", Discount = 0, Error = error };
+                    return StatusCode(StatusCodes.Status404NotFound, err);
                 }
 
                 if (basket.RedeemCode == null)
                 {
+                    await _redeemCodesRepository.UseRedeenCode(redeemCode);
                     basket.RedeemCode = redeem;
                 }
                 else
@@ -53,7 +73,7 @@ namespace Zupa.Test.Booking.Controllers
                 }
             }
             basket = await _basketsRepository.ReadAsync();
-            return basket.ToBasketViewModel();
+            return new RedeemCodeModel { Id = basket.RedeemCode.id, Discount = basket.RedeemCode.Discount, Error = "" };
         }
     }
 }
