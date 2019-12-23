@@ -9,12 +9,9 @@ namespace Zupa.Test.Booking.Data
     {
         private Basket _basket;
 
-        public ICalcEngineService<Basket> BasketNetPriceCalculation { get; }
-
-        public InMemoryBasketsRepository(ICalcEngineService<Basket> basketNetPriceCalculation)
+        public InMemoryBasketsRepository()
         {
             _basket = new Basket();
-            BasketNetPriceCalculation = basketNetPriceCalculation;
         }
 
         public async Task<Basket> ReadAsync()
@@ -41,7 +38,6 @@ namespace Zupa.Test.Booking.Data
             }
        
             _basket.Items = items;
-           // _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
             return await Task.FromResult(_basket);
         }
     }
