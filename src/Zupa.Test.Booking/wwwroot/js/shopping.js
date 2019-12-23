@@ -67,7 +67,7 @@ function updateBasketView(basket)
     totalSpan.innerText = "Total (GBP)";
     totalLi.appendChild(totalSpan);
     let totalStrong = document.createElement('strong');
-    totalStrong.innerText = "£" + basket.total ;    
+    totalStrong.innerText = "£" + basket.grossTotal ;    
     totalLi.appendChild(totalStrong);
     basketList.appendChild(totalLi);
 
@@ -109,6 +109,56 @@ function addToBasket(product) {
         resetBasketCount(basket.items.length);
         updateBasketView(basket);
     });
+}
+
+
+function placeOrderRedeemOld() {
+    let code = document.getElementById('promoCode').value;
+    let url = "/api/baskets?" + $.param({ redeemCode: code });
+   // fetch(url)
+       fetch('/api/baskets')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (basket) {
+            fetch('api/orders', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(basket)
+            }).then(function (response) {
+                return response.json();
+            }).then(function (order) {
+                alert('your order has been placed');
+                resetBasketCount(0);
+                emptyBasketView();
+            });
+        });
+}
+
+function placeOrderRedeem() {
+    let redeemCode = document.getElementById('promoCode').value;
+    fetch('/api/RedeemCodes',
+        {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(redeemCode)
+        })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (response) {
+                return response.json();
+            }).then(function (order) {
+                alert('Redeem Code used.');
+              //  resetBasketCount(0);
+               // emptyBasketView();
+            });
 }
 
 function placeOrder() {

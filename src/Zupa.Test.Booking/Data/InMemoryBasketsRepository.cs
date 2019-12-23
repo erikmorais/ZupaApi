@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Zupa.Test.Booking.Models;
+using Zupa.Test.Booking.Services;
 
 namespace Zupa.Test.Booking.Data
 {
@@ -8,14 +9,18 @@ namespace Zupa.Test.Booking.Data
     {
         private Basket _basket;
 
-        public InMemoryBasketsRepository()
+        public IBasketNetPriceCalculation BasketNetPriceCalculation { get; }
+
+        public InMemoryBasketsRepository(IBasketNetPriceCalculation basketNetPriceCalculation)
         {
             _basket = new Basket();
+            BasketNetPriceCalculation = basketNetPriceCalculation;
         }
 
-        public Task<Basket> ReadAsync()
+        public async Task<Basket> ReadAsync()
         {
-            return Task.FromResult(_basket);
+            _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
+            return await Task.FromResult(_basket);
         }
 
         public Task ResetBasketAsync()
@@ -23,13 +28,13 @@ namespace Zupa.Test.Booking.Data
             return Task.FromResult(_basket = new Basket());
         }
 
-        public Task<Basket> AddToBasketAsync(BasketItem item)
+        public async Task<Basket> AddToBasketAsync(BasketItem item)
         {
             var items = _basket.Items.ToList();
             items.Add(item);
             _basket.Items = items;
-
-            return Task.FromResult(_basket);
+            _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
+            return await Task.FromResult(_basket);
         }
     }
 }

@@ -11,11 +11,15 @@ namespace Zupa.Test.Booking.Controllers
     public class BasketsController : ControllerBase
     {
         private readonly IBasketsRepository _basketsRepository;
+        private readonly IRedeemCodesRepository _redeemCodesRepository;
 
-        public BasketsController(IBasketsRepository basketsRepository)
+        public BasketsController(IBasketsRepository basketsRepository, IRedeemCodesRepository redeemCodesRepository)
         {
             _basketsRepository = basketsRepository;
+            _redeemCodesRepository = redeemCodesRepository;
         }
+
+    
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -31,9 +35,15 @@ namespace Zupa.Test.Booking.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Basket>> GetBasket()
+        public async Task<ActionResult<Basket>> GetBasket(string redeemCode)
         {
             var basket = await _basketsRepository.ReadAsync();
+            if (redeemCode != null)
+            {
+                var redeem = await _redeemCodesRepository.ReadAsync(redeemCode);
+                basket.RedeemCode = redeem;
+            }
+
             return basket.ToBasketViewModel();
         }
     }
