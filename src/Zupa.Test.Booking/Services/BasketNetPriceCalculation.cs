@@ -9,18 +9,12 @@ namespace Zupa.Test.Booking.Services
 {
     public class BasketNetPriceCalculation : IBasketNetPriceCalculation
     {
-        public BasketNetPriceCalculation(IRedeemCodesRepository redeemCodeRepository)
-        {
-            RedeemCodeRepository = redeemCodeRepository;
-        }
-
-        public IRedeemCodesRepository RedeemCodeRepository { get; }
-
 
         public async Task<Basket> CalculateTotals(Basket basket)
         {
             basket.NetTotal = Math.Round(basket.Items.Sum(item => item.Quantity * item.NetPrice), 2);
             basket.GrossTotal = Math.Round(basket.Items.Sum(item => item.Quantity * item.GrossPrice), 2);
+            basket.TaxTotal = Math.Round(basket.Items.Sum(item => item.NetPrice * item.TaxRate), 2);
 
             if (basket.RedeemCode != null)
             {

@@ -8,6 +8,7 @@ namespace Zupa.Test.Booking.Models
         public IEnumerable<BasketItem> Items { get; set; } = new List<BasketItem>();
         public double GrossTotal { get; set; }
         public double NetTotal { get; set; }
+        public double TaxTotal { get; set; }
         public RedeemCode RedeemCode { get; set; }
     }
 }

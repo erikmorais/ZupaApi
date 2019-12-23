@@ -5,13 +5,14 @@ namespace Zupa.Test.Booking.ViewModels
 {
     public static class BasketExtensionMethods
     {
-        public static Models.Order ToOrderModel(this Basket basket, double discount)
+        public static Models.Order ToOrderModel(this Basket basket)
         {
             return new Models.Order
             {
                 ID = Guid.NewGuid(),
-                GrossTotal = basket.Items.Sum(item => item.GrossPrice*(1- discount)),
-                TaxTotal = basket.Items.Sum(item => item.NetPrice * item.TaxRate),
+                GrossTotal = basket.GrossTotal,
+                TaxTotal = basket.TaxTotal ,
+                NetTotal = basket.NetTotal,
                 Items = basket.Items.ToOrderItemModels()
             };
         }
@@ -21,7 +22,9 @@ namespace Zupa.Test.Booking.ViewModels
             return new Basket
             {
                 Items = basket.Items.ToBasketItemViewModels(),
-                GrossTotal = basket.GrossTotal      
+                GrossTotal = basket.GrossTotal ,
+                NetTotal =basket.NetTotal,
+                TaxTotal =basket.TaxTotal
             };
         }
     }

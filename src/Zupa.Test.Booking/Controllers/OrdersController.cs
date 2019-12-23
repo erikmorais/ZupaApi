@@ -25,9 +25,7 @@ namespace Zupa.Test.Booking.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Order>> PlaceOrder([FromBody]Basket basket)
         {
-            var basketRep = await _basketsRepository.ReadAsync();
-            double discount = basketRep.RedeemCode == null ? 0: basketRep.RedeemCode.Discount;
-            var orderModel = basket.ToOrderModel(discount);
+            var orderModel = basket.ToOrderModel();
             await _ordersRepository.SaveAsync(orderModel);
             await _basketsRepository.ResetBasketAsync();
 
