@@ -6,9 +6,8 @@ using Zupa.Test.Booking.Models;
 
 namespace Zupa.Test.Booking.Services
 {
-    public interface IBasketNetPriceCalculation
+    public interface ICalcEngineService<T>
     {
-       // Task<Basket> CalculateTotals(Basket basket, RedeemCode redeemCode);
-        Task<Basket> CalculateTotals(Basket basket);
+        Task<T> CalculateTotals(T basket);
     }
 }

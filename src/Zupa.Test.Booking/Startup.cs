@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Zupa.Test.Booking.Data;
+using Zupa.Test.Booking.Models;
 using Zupa.Test.Booking.Services;
 
 namespace Zupa.Test.Booking
@@ -15,7 +16,7 @@ namespace Zupa.Test.Booking
             services.AddSingleton<IBasketsRepository, InMemoryBasketsRepository>();
             services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             services.AddSingleton<IRedeemCodesRepository, InMemoryRedeemCodesRepository>();
-            services.AddSingleton<IBasketNetPriceCalculation, BasketNetPriceCalculation>();
+            services.AddSingleton<ICalcEngineService<Basket>, CalcEnginePromoCodeService>();
             
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

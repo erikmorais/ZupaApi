@@ -7,7 +7,7 @@ using Zupa.Test.Booking.Models;
 
 namespace Zupa.Test.Booking.Services
 {
-    public class BasketNetPriceCalculation : IBasketNetPriceCalculation
+    public class CalcEnginePromoCodeService : ICalcEngineService<Basket>
     {
 
         public async Task<Basket> CalculateTotals(Basket basket)

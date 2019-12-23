@@ -9,9 +9,9 @@ namespace Zupa.Test.Booking.Data
     {
         private Basket _basket;
 
-        public IBasketNetPriceCalculation BasketNetPriceCalculation { get; }
+        public ICalcEngineService<Basket> BasketNetPriceCalculation { get; }
 
-        public InMemoryBasketsRepository(IBasketNetPriceCalculation basketNetPriceCalculation)
+        public InMemoryBasketsRepository(ICalcEngineService<Basket> basketNetPriceCalculation)
         {
             _basket = new Basket();
             BasketNetPriceCalculation = basketNetPriceCalculation;
@@ -31,7 +31,16 @@ namespace Zupa.Test.Booking.Data
         public async Task<Basket> AddToBasketAsync(BasketItem item)
         {
             var items = _basket.Items.ToList();
-            items.Add(item);
+            var itemExist = items.Where(i => i.Id == item.Id && i.NetPrice == item.NetPrice && i.TaxRate == item.TaxRate).SingleOrDefault() ;
+            if (itemExist== null)
+            {
+                items.Add(item);
+            }
+            else
+            {
+                itemExist.Quantity += item.Quantity;
+            }
+       
             _basket.Items = items;
             _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
             return await Task.FromResult(_basket);
