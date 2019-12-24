@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Zupa.Test.Booking.Data;
+using Zupa.Test.Booking.Services;
 using Zupa.Test.Booking.ViewModels;
 
 namespace Zupa.Test.Booking.Controllers
@@ -14,7 +15,7 @@ namespace Zupa.Test.Booking.Controllers
         private readonly IBasketsRepository _basketsRepository;
         private readonly IOrdersRepository _ordersRepository;
 
-        public OrdersController(IBasketsRepository basketsRepository, IOrdersRepository ordersRepository)
+        public OrdersController(IBasketsService basketsRepository, IOrdersRepository ordersRepository)
         {
             _basketsRepository = basketsRepository;
             _ordersRepository = ordersRepository;
