@@ -16,12 +16,13 @@ namespace Zupa.Test.Booking
             services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
             services.AddSingleton<IBasketsRepository, InMemoryBasketsRepository>();
             services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
-
             services.AddSingleton<IRedeemCodesRepository, InMemoryRedeemCodesRepository>();
-            services.AddSingleton<ICalcEngineService<Basket>, CalcEnginePromoCodeService>();
 
+            services.AddSingleton<ICalcEngineService<Basket>, CalcEngineService>();
             services.AddSingleton<IBasketsService, BasketsService>();
+
             services.AddSingleton<IBasketItemExpressionFactory, BasketItemExpressionFactory>();
+            services.AddSingleton<ICalcHandlerFactory, CalcHandlerFactory>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(swagger =>

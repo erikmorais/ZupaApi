@@ -18,10 +18,7 @@ namespace Zupa.Test.Booking.Services.CalServicesChain
         }
         public override async Task HandleCalc(Basket basket)
         {
-            if (basket.RedeemCode != null)
-                await CalculateTotals(basket);
-            else if (_successor != null)
-                await Task.FromResult(_successor.HandleCalc(basket));
+            await CalculateTotals(basket);
         }
     }
 }
