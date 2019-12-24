@@ -1,3 +1,19 @@
+
+# Implementation Notes
+
+**Design patterns:**
+
+Factory : for calc handler chain
+Decorator : for extending Basket repository to using calc service
+Specification inspired for ExpressionTree on searching repositories. this one identifies if already exists a item from the same product in the basket. definition of this equality can be extended, so it gives flexibility
+
+**Fixes and Enhancements:**
+
+User can apply another promo code, in this case, as the user havent done the check out, the former code became again available.
+Basket adds up items quantities, having a single line in the cart.
+
+
+
 # Zupa Developer Test
 
 This test is used as part of the recruitment process for developers looking to join Zupa. We would expect candidates to need a couple of hours to complete the requirements, however there is no fixed time limit and you may spend as much time as you wish.
