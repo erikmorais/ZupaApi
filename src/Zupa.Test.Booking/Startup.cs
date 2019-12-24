@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Zupa.Test.Booking.Data;
+using Zupa.Test.Booking.Factories;
 using Zupa.Test.Booking.Models;
 using Zupa.Test.Booking.Services;
 
@@ -14,11 +15,13 @@ namespace Zupa.Test.Booking
         {
             services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
             services.AddSingleton<IBasketsRepository, InMemoryBasketsRepository>();
-            services.AddSingleton<IBasketsService, BasketsService>();
             services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
+
             services.AddSingleton<IRedeemCodesRepository, InMemoryRedeemCodesRepository>();
             services.AddSingleton<ICalcEngineService<Basket>, CalcEnginePromoCodeService>();
-            
+
+            services.AddSingleton<IBasketsService, BasketsService>();
+            services.AddSingleton<IBasketItemExpressionFactory, BasketItemExpressionFactory>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(swagger =>
