@@ -4,7 +4,9 @@
 **Design patterns:**
 
 Factory : for calc handler chain
+
 Decorator : for extending Basket repository to using calc service
+
 Specification inspired for ExpressionTree on searching repositories. this one identifies if already exists a item from the same product in the basket. definition of this equality can be extended, so it gives flexibility
 
 **Fixes and Enhancements:**
