@@ -1,25 +1,23 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Zupa.Test.Booking.Factories;
 using Zupa.Test.Booking.Models;
-using Zupa.Test.Booking.Services;
 
 namespace Zupa.Test.Booking.Data
 {
     internal class InMemoryBasketsRepository : IBasketsRepository
     {
         private Basket _basket;
+        private readonly IBasketItemExpressionFactory basketItemExpressionFactory;
 
-        public IBasketNetPriceCalculation BasketNetPriceCalculation { get; }
-
-        public InMemoryBasketsRepository(IBasketNetPriceCalculation basketNetPriceCalculation)
+        public InMemoryBasketsRepository(IBasketItemExpressionFactory basketItemExpressionFactory)
         {
             _basket = new Basket();
-            BasketNetPriceCalculation = basketNetPriceCalculation;
+            this.basketItemExpressionFactory = basketItemExpressionFactory;
         }
 
         public async Task<Basket> ReadAsync()
         {
-            _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
             return await Task.FromResult(_basket);
         }
 
@@ -27,13 +25,27 @@ namespace Zupa.Test.Booking.Data
         {
             return Task.FromResult(_basket = new Basket());
         }
-
+        /// <summary>
+        /// It uses specific pattern to find if the same item have been already inserted to the cart.
+        /// It makes flexible for extenting new definitions of the items that are in the same basket are equal. 
+        /// For example: Price is a property that make products in the chart of the same product as distinct basket items 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public async Task<Basket> AddToBasketAsync(BasketItem item)
         {
             var items = _basket.Items.ToList();
-            items.Add(item);
+            var itemExist = items.AsQueryable().Where(basketItemExpressionFactory.AreEqual(item)).SingleOrDefault();
+            if (itemExist == null)
+            {
+                items.Add(item);
+            }
+            else
+            {
+                itemExist.Quantity += item.Quantity;
+            }
+
             _basket.Items = items;
-            _basket = await BasketNetPriceCalculation.CalculateTotals(_basket);
             return await Task.FromResult(_basket);
         }
     }

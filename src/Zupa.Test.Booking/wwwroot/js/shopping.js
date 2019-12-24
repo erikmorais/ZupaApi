@@ -41,7 +41,7 @@
         })
         .then(function (basket) {
             updateBasketView(basket);
-            resetBasketCount(basket.items.length);
+            resetBasketCount(countItems(basket.items));
         });
 });
 
@@ -57,17 +57,16 @@ function resetBasketCount(basketSize) {
     basketCount.innerText = basketSize;
 }
 
-function updateBasketView(basket)
-{
+function updateBasketView(basket) {
     let basketList = document.getElementById('currentBasket');
-    
+
     let totalLi = document.createElement('li');
     totalLi.className = "list-group-item d-flex justify-content-between";
     let totalSpan = document.createElement('span');
     totalSpan.innerText = "Total (GBP)";
     totalLi.appendChild(totalSpan);
     let totalStrong = document.createElement('strong');
-    totalStrong.innerText = "£" + basket.grossTotal ;    
+    totalStrong.innerText = "£" + basket.grossTotal;
     totalLi.appendChild(totalStrong);
     basketList.appendChild(totalLi);
 
@@ -80,10 +79,10 @@ function updateBasketView(basket)
         h6.innerText = item.name;
         let small = document.createElement('small');
         small.className = "text-muted";
-        small.innerText = item.quantity;
+        small.innerText = "Qtd: " + item.quantity;
         let span = document.createElement('span');
         span.className = "text-muted";
-        span.innerText = item.grossPrice;
+        span.innerText = "Total: " + item.grossPrice * item.quantity;
 
         li.appendChild(div);
         div.appendChild(h6);
@@ -106,11 +105,18 @@ function addToBasket(product) {
         return response.json();
     }).then(function (basket) {
         emptyBasketView();
-        resetBasketCount(basket.items.length);
+        //resetBasketCount(basket.items.length);
+        resetBasketCount(countItems(basket.items));
         updateBasketView(basket);
     });
 }
-
+function countItems(items) {
+    var total = 0;
+    for (var i = 0; i < items.length; i++) {
+        total = total + items[i].quantity;
+    }
+    return total;
+}
 function RedeemCode() {
     let redeemCode = document.getElementById('promoCode').value;
     fetch('/api/RedeemCodes',
@@ -123,7 +129,7 @@ function RedeemCode() {
             body: JSON.stringify(redeemCode)
         })
         .then(function (response) {
-                return response.json();
+            return response.json();
         })
         .then(function (response) {
             const json = response;
@@ -139,7 +145,7 @@ function RedeemCode() {
                 })
                 .then(function (basket) {
                     emptyBasketView();
-                    resetBasketCount(basket.items.length);
+                    resetBasketCount(countItems(basket.items));
                     updateBasketView(basket);
                 });
         });
