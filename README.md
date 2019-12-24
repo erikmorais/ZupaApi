@@ -7,7 +7,8 @@ Factory : for calc handler chain
 
 Decorator : for extending Basket repository to using calc service
 
-Specification inspired for ExpressionTree on searching repositories. this one identifies if already exists a item from the same product in the basket. definition of this equality can be extended, so it gives flexibility
+Specification inspired for ExpressionTree on searching repositories. this one identifies the product that has been already added to the basket. So equitability can be easily extended as well any other queryable result.
+
 
 **Fixes and Enhancements:**
 
